@@ -1,0 +1,13 @@
+Package: weaverfunctions
+Type: Package
+Title: WeaverFunctions
+Version: 1.0.0
+Date: 2014-06-13
+Author: Ben Weaver
+Maintainer: Ben Weaver <weaver@hudsonalpha.org>
+Description: Some handy functions by Ben
+License: LGPL-3
+LazyLoad: yes
+NeedsCompilation: no
+Repository: CRAN
+Date/Publication: 2014-02-25 09:31:30
