@@ -93,7 +93,7 @@ get_directory_file_names <- function(directory){
 #' @return NULL
 qwrite <- function(x, file){
   write.table(x, file=file, quote=F, col.names=T, row.names=F, sep="\t")
-  return(NULL)
+  return(paste("Wrote file to", file))
 }
 
 #### Take samples of all files in a directory ####
