@@ -11,3 +11,4 @@ LazyLoad: yes
 NeedsCompilation: no
 Repository: CRAN
 Date/Publication: 2014-02-25 09:31:30
+RoxygenNote: 5.0.1

@@ -1,3 +1,13 @@
+#' @docType package
+#' @name bedanno
+#' @title Useful functions.
+#' @import dplyr
+NULL
+#' @import data.table
+NULL
+#' @import parallel
+
+
 #######################################################
 ###################### Utilities ######################
 
@@ -109,7 +119,7 @@ qwrite <- function(x, file){
 #' @return NULL
 qwritesamples <- function(dir,nsamples=10000,seed=NULL){
   file_paths <- get_directory_file_names(dir)
-  sapply(file_paths,function(x){file_table<-fread(x);set.seed(seed);qwrite(file_table[sample(nrow(file_table),nsamples),],file=paste(x,".sample",sep=""))})
+  sapply(file_paths,function(x){file_table<-data.table::fread(x);set.seed(seed);qwrite(file_table[sample(nrow(file_table),nsamples),],file=paste(x,".sample",sep=""))})
   return(NULL)
 }
 
@@ -137,7 +147,7 @@ chunk <- function(x,n) split(x, cut(seq_along(x), n, labels = FALSE))
 #' @return NULL
 split_file<-function(file_path,split_col_name){
   activate_packages("plyr")
-  df<-data.frame(fread(file_path))
+  df<-data.frame(data.table::fread(file_path))
   split_list<-dlply(df,split_col_name,function(x){x})
   dir_path<-paste(file_path,"split",split_col_name,sep="_")
   dir.create(dir_path,recursive=TRUE)
@@ -161,8 +171,7 @@ split_file<-function(file_path,split_col_name){
 merge_files<-function(file_paths){
   activate_packages(c("data.table","parallel"))
   library("parallel")
-  library(data.table)
-  merged<-do.call(rbind,mclapply(file_paths,fread,mc.cores=4))
+  merged<-do.call(rbind,parallel::mclapply(file_paths,data.table::fread,mc.cores=4))
   out_file<-paste(dirname(file_paths[1]),"/merged.out",sep="")
   print(out_file)
   qwrite(merged,file=out_file)
@@ -207,7 +216,7 @@ geom_mean <- function(x){prod(x)^(1/length(x))}
 #' @param plotlist A list of ggplot objects
 #' @param file Not sure about this
 #' @param cols Integer number of columns in output
-#' @param layout Matrix fine control of output 
+#' @param layout Matrix fine control of output
 #' @return NULL
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   require(grid)
@@ -245,4 +254,18 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 
-
+#' @title gzfread
+#' @description Import text from gzipped or gunzipped file to data.table
+#' @aliases gzfread
+#' @author http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+#' @export gzfread
+#' @param path a character
+#' @return data.table
+gzfread <- function(path, sep = "\t", out_dir = NULL){
+  if(!stringr::str_detect(path, ".gz$")) {
+    return(data.table::fread(path, sep = sep))
+  }
+  else{
+    return(data.table::fread(paste0("zcat < ", "\"", path, "\"")))
+  }
+}
