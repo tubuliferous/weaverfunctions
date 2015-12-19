@@ -23,7 +23,7 @@ activate_colorout <- function(){
   pkg = "colorout"
   if (pkg %in% rownames(installed.packages()) == FALSE){
     # Install package if not already installed
-    download.file("http://www.lepem.ufc.br/jaa/colorout_1.1-0.tar.gz", destfile = "colorout_1.1-0.tar.gz")
+    download.file("http://www.lepem.ufc.br/jaa/colorout_1.1-1.tar.gz", destfile = "colorout_1.1-0.tar.gz")
     install.packages("colorout_1.1-0.tar.gz", type = "source", repos = NULL)
     # Enable newly installed package
     library(pkg,character.only=TRUE)
