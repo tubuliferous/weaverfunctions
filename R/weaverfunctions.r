@@ -261,12 +261,14 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #' @export gzfread
 #' @param path a character
 #' @return data.table
-gzfread <- function(path, sep = "\t", out_dir = NULL){
+gzfread <- function(path, sep = "\t", skip = 0L, out_dir = NULL){
   if(!stringr::str_detect(path, ".gz$")) {
-    return(data.table::fread(path, sep = sep))
+    return(data.table::fread(path, sep = sep, skip = skip))
   }
   else{
-    return(data.table::fread(paste0("zcat < ", "\"", path, "\"")))
+    return(data.table::fread(paste0("zcat < ", "\"", path, "\""), sep = sep, skip = skip))
   }
 }
+
+
 
